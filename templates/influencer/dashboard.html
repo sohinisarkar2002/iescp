@@ -1,0 +1,115 @@
+{% extends 'influencer/base.html' %} {% block title %}Influencer Dashboard{%
+endblock %} {% block content %}
+<h1>Influencer Dashboard</h1>
+<p>Welcome, {{ session.username }}! Here are your details:</p>
+
+<!-- List for ad requests -->
+<div class="container">
+  <ul class="list-group mb-4">
+    <li class="list-group-item">
+      <strong>Active Ad Requests:</strong> {{ active_ad_requests }}
+    </li>
+    <li class="list-group-item">
+      <strong>Pending Ad Requests:</strong> {{ pending_ad_requests }}
+    </li>
+    <li class="list-group-item">
+      <strong>Accepted Ad Requests:</strong> {{ accepted_ad_requests }}
+    </li>
+  </ul>
+
+  <!-- Cards for category, niche, and reach -->
+  <div class="row">
+    <div class="col-md-4">
+      <div class="card mb-4">
+        <div class="card-body">
+          <h5 class="card-title">Category</h5>
+          <p class="card-text">{{ user.category }}</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card mb-4">
+        <div class="card-body">
+          <h5 class="card-title">Niche</h5>
+          <p class="card-text">{{ user.niche }}</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card mb-4">
+        <div class="card-body">
+          <h5 class="card-title">Reach</h5>
+          <p class="card-text">{{ user.reach }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ad Requests Table -->
+  <h2 class="mb-1 mt-3">Ad Requests</h2>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Sponsor</th>
+        <th>Campaign</th>
+        <th>Message</th>
+        <th>Requirements</th>
+        <th>Payment Amount</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for ad_request in ad_requests %}
+      <tr>
+        <td>{{ ad_request[7] }}</td>
+        <td>{{ ad_request[6] }}</td>
+        <td>{{ ad_request[2]|safe }}</td>
+        <td>{{ ad_request[3] }}</td>
+        <td>$ {{ ad_request[4] }}</td>
+        <td>{{ ad_request[5] }}</td>
+        <td>
+          {% if ad_request[5] == 'Pending' %}
+          <a
+            href="{{ url_for('main.accept_ad_request', ad_request_id=ad_request[0]) }}"
+            class="btn btn-success"
+            >Accept</a
+          >
+          <a
+            href="{{ url_for('main.reject_ad_request', ad_request_id=ad_request[0]) }}"
+            class="btn btn-danger mt-2"
+            >Reject</a
+          >
+          <a
+            href="{{ url_for('main.respond_negotiation', ad_request_id=ad_request[0]) }}"
+            class="btn btn-primary mt-2"
+            >Negotiate</a
+          >
+          {% elif ad_request[5] == 'Negotiating' %}
+          <a
+            href="{{ url_for('main.respond_negotiation', ad_request_id=ad_request[0]) }}"
+            class="btn btn-warning"
+            >Negotiate</a
+          >
+          <a
+            href="{{ url_for('main.accept_ad_request', ad_request_id=ad_request[0]) }}"
+            class="btn btn-success mt-2"
+            >Accept</a
+          >
+          <a
+            href="{{ url_for('main.reject_ad_request', ad_request_id=ad_request[0]) }}"
+            class="btn btn-danger mt-2"
+            >Reject</a
+          >
+          {% endif %}
+        </td>
+      </tr>
+      {% else %}
+      <tr>
+        <td colspan="7">No ad requests found!</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

@@ -1,0 +1,35 @@
+{% extends 'sponsor/base.html' %} {% block content %}
+<h2 class="mt-2 mb-3">Negotiate Ad Request</h2>
+
+{% if ad_request.message %}
+<div class="alert alert-info">
+  <h4>Payment request from Influencer:</h4>
+  <p>{{ ad_request.message|safe }}</p>
+</div>
+{% endif %}
+
+<form method="POST">
+  <div class="form-group">
+    <label for="payment_amount">New Payment Amount</label>
+    <input
+      type="number"
+      class="form-control"
+      id="payment_amount"
+      name="payment_amount"
+      required
+    />
+  </div>
+  <div class="form-group">
+    <label for="response_message">Response Message</label>
+    <textarea
+      class="form-control"
+      id="response_message"
+      name="response_message"
+      required
+    ></textarea>
+  </div>
+  <button type="submit" name="action" value="negotiate" class="btn btn-warning">
+    Send Changes
+  </button>
+</form>
+{% endblock %}

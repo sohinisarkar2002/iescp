@@ -1,0 +1,78 @@
+{% extends "sponsor/base.html" %} {% block content %}
+<h1>Create Campaign</h1>
+<form method="POST" action="{{ url_for('main.create_campaign') }}">
+  <div class="form-group">
+    <label for="name">Campaign Name</label>
+    <input type="text" class="form-control" id="name" name="name" required />
+  </div>
+  <div class="form-group">
+    <label for="description">Description</label>
+    <textarea
+      class="form-control"
+      id="description"
+      name="description"
+      required
+    ></textarea>
+  </div>
+  <div class="form-group">
+    <label for="start_date">Start Date</label>
+    <input
+      type="date"
+      class="form-control"
+      id="start_date"
+      name="start_date"
+      required
+    />
+  </div>
+  <div class="form-group">
+    <label for="end_date">End Date</label>
+    <input
+      type="date"
+      class="form-control"
+      id="end_date"
+      name="end_date"
+      required
+    />
+  </div>
+  <div class="form-group">
+    <label for="budget">Budget</label>
+    <input
+      type="number"
+      class="form-control"
+      id="budget"
+      name="budget"
+      required
+    />
+  </div>
+  <div class="form-group">
+    <label for="visibility">Visibility</label>
+    <select class="form-control" id="visibility" name="visibility" required>
+      <option value="public">Public</option>
+      <option value="private">Private</option>
+    </select>
+  </div>
+  <div class="form-group">
+    <label for="goals">Goals</label>
+    <textarea class="form-control" id="goals" name="goals" required></textarea>
+  </div>
+  <div class="form-group">
+    <label for="category">Category</label>
+    <select class="form-control" id="category" name="category" required>
+      <option value="" disabled selected>Select an option</option>
+      {% for cat in categories %}
+      <option value="{{ cat }}">{{ cat }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="form-group">
+    <label for="niche">Niche</label>
+    <select class="form-control" id="niche" name="niche" required>
+      <option value="" disabled selected>Select an option</option>
+      {% for niche in niches %}
+      <option value="{{ niche }}">{{ niche }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <button type="submit" class="btn btn-primary">Create Campaign</button>
+</form>
+{% endblock %}

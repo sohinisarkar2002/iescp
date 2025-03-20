@@ -1,0 +1,66 @@
+{% extends 'admin/base.html' %} {% block title %}Flag Users{% endblock %} {%
+block content %}
+<h1>Flag Users</h1>
+
+<form method="post" action="{{ url_for('main.flag_user') }}">
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Username</th>
+        <th>Email</th>
+        <th>Role</th>
+        <th>Flagged</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for user in users %}
+      <tr>
+        <td>{{ user[0] }}</td>
+        <td>{{ user[1] }}</td>
+        <td>{{ user[2] }}</td>
+        <td>{{ user[3] }}</td>
+        <td>{{ 'Yes' if user[4] else 'No' }}</td>
+        <td>
+          <form
+            method="post"
+            action="{{ url_for('main.flag_user') }}"
+            style="display: inline"
+          >
+            <input type="hidden" name="user_id" value="{{ user[0] }}" />
+            {% if user[4] %}
+            <button
+              type="submit"
+              name="action"
+              value="unflag"
+              class="btn btn-warning"
+            >
+              Unflag
+            </button>
+            {% else %}
+            <button
+              type="submit"
+              name="action"
+              value="flag"
+              class="btn btn-danger"
+            >
+              Flag
+            </button>
+            {% endif %}
+            <button
+              type="submit"
+              name="action"
+              value="delete"
+              class="btn btn-danger"
+            >
+              Delete
+            </button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</form>
+{% endblock %}

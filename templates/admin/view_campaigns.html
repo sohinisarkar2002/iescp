@@ -1,0 +1,82 @@
+{% extends 'admin/base.html' %} {% block title %}View Campaigns{% endblock %} {%
+block content %}
+<h1>View Campaigns</h1>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+      <th>Description</th>
+      <th>Start Date</th>
+      <th>End Date</th>
+      <th>Budget</th>
+      <th>Visibility</th>
+      <th>Goals</th>
+      <th>Flagged</th>
+      <th>Status</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for campaign in campaigns %}
+    <tr>
+      <td>{{ campaign[0] }}</td>
+      <td>{{ campaign[1] }}</td>
+      <td>{{ campaign[2] }}</td>
+      <td>{{ campaign[3] }}</td>
+      <td>{{ campaign[4] }}</td>
+      <td>{{ campaign[5] }}</td>
+      <td>{{ campaign[6] }}</td>
+      <td>{{ campaign[7] }}</td>
+      <td>{{ 'Yes' if campaign[8] else 'No' }}</td>
+      <td>
+        {% if today < campaign[3] %}
+        <span class="text-warning">UPCOMING</span>
+        {% elif today >= campaign[3] and today <= campaign[4] %}
+        <span class="text-success">ACTIVE</span>
+        {% else %}
+        <span class="text-danger">INACTIVE</span>
+        {% endif %}
+      </td>
+      <td>
+        <form
+          method="post"
+          action="{{ url_for('main.flag_campaign') }}"
+          style="display: inline"
+        >
+          <input type="hidden" name="campaign_id" value="{{ campaign[0] }}" />
+          {% if campaign[8] %}
+          <button
+            type="submit"
+            name="action"
+            value="unflag"
+            class="btn btn-warning mb-2"
+          >
+            Unflag
+          </button>
+          {% else %}
+          <button
+            type="submit"
+            name="action"
+            value="flag"
+            class="btn btn-danger mb-2"
+          >
+            Flag
+          </button>
+          {% endif %}
+          <button
+            type="submit"
+            name="action"
+            value="delete"
+            class="btn btn-outline-danger"
+          >
+            Delete
+          </button>
+        </form>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

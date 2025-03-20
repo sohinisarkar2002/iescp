@@ -1,0 +1,41 @@
+{% extends 'influencer/base.html' %}
+
+{% block title %}Update Profile{% endblock %}
+
+{% block content %}
+<h2>Update Profile</h2>
+<form method="POST" action="{{ url_for('main.influencer_profile') }}">
+    <div class="mb-3">
+        <label for="username" class="form-label">Username</label>
+        <input type="text" class="form-control" id="username" name="username" value="{{ user.username }}" required>
+    </div>
+    <div class="mb-3">
+        <label for="email" class="form-label">Email</label>
+        <input type="email" class="form-control" id="email" name="email" value="{{ user.email }}" required>
+    </div>
+    <div class="mb-3">
+        <label for="category" class="form-label">Category</label>
+        <select class="form-select" id="category" name="category" required>
+            <option value="">Select an Option</option>
+            {% for cat in categories %}
+            <option value="{{ cat }}" {% if user.category == cat %}selected{% endif %}>{{ cat }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="mb-3">
+        <label for="niche" class="form-label">Niche</label>
+        <select class="form-select" id="niche" name="niche" required>
+            <option value="">Select an Option</option>
+            {% for niche in niches %}
+            <option value="{{ niche }}" {% if user.niche == niche %}selected{% endif %}>{{ niche }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="mb-3">
+        <label for="reach" class="form-label">Reach</label>
+        <input type="text" class="form-control" id="reach" name="reach" value="{{ user.reach }}" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Update Profile</button>
+    <a href="{{ url_for('main.influencer_dashboard') }}" class="btn btn-danger">Cancel</a>
+</form>
+{% endblock %}

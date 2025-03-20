@@ -1,0 +1,14 @@
+.text-blue {
+    color: #008080;
+  }  
+
+section #id{
+    background-color: #f8f9fa; 
+    height: 100vh
+}
+.custom-right {
+    position: absolute;
+    right: 0;
+    margin-right: 2%;
+  }
+  

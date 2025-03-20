@@ -1,0 +1,47 @@
+{% extends 'sponsor/base.html' %}
+
+{% block content %}
+<h1 class="mt-2">Update Ad Request</h1>
+
+<form method="post" class="mb-2">
+  <div class="form-group">
+    <label for="campaign_id">Campaign name</label>
+    <select class="form-control" id="campaign_id" name="campaign_id" required>
+      {% for campaign in campaigns %}
+        <option value="{{ campaign[0] }}" {% if ad_request['campaign_id'] == campaign[0] %}selected{% endif %}>{{ campaign[1] }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="form-group">
+    <label for="influencer_id">Influencer name</label>
+    <select class="form-control" id="influencer_id" name="influencer_id" required>
+      {% for influencer in influencers %}
+        <option value="{{ influencer[0] }}" {% if ad_request['influencer_id'] == influencer[0] %}selected{% endif %}>{{ influencer[1] }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="form-group">
+    <label for="message">Message</label>
+    <textarea class="form-control" id="message" name="message" rows="3" required>{{ ad_request['message']|safe }}</textarea>
+  </div>
+  <div class="form-group">
+    <label for="requirements">Requirements</label>
+    <textarea class="form-control" id="requirements" name="requirements" rows="3" required>{{ ad_request['requirements'] }}</textarea>
+  </div>
+  <div class="form-group">
+    <label for="payment_amount">Payment Amount</label>
+    <input type="number" class="form-control" id="payment_amount" name="payment_amount" value="{{ ad_request['payment_amount'] }}" required>
+  </div>
+  <div class="form-group">
+    <label for="status">Status</label>
+    <select class="form-control" id="status" name="status" required>
+      <option value="Pending" {% if ad_request['status'] == 'Pending' %}selected{% endif %}>Pending</option>
+      <option value="Accepted" {% if ad_request['status'] == 'Accepted' %}selected{% endif %}>Accepted</option>
+      <option value="Rejected" {% if ad_request['status'] == 'Rejected' %}selected{% endif %}>Rejected</option>
+      <option value="Negotiating" {% if ad_request['status'] == 'Negotiating' %}selected{% endif %}>Negotiating</option>
+    </select>
+  </div>
+  <button type="submit" class="btn btn-primary">Update</button>
+  <a href="{{ url_for('main.sponsor_dashboard') }}" class="btn btn-danger">Cancel</a>
+</form>
+{% endblock %}

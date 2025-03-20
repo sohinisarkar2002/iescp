@@ -1,0 +1,42 @@
+<!-- In `view_ad_requests.html` -->
+
+{% extends 'admin/base.html' %} {% block title %}View Ad Requests{% endblock %}
+{% block content %}
+<h1>View Ad Requests</h1>
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th>Request ID</th>
+      <th>Campaign ID</th>
+      <th>Influencer ID</th>
+      <th>Message</th>
+      <th>Requirements</th>
+      <th>Payment Amount</th>
+      <th>Status</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for request in ad_requests %}
+    <tr>
+      <td>{{ request[0] }}</td>
+      <td>{{ request[1] }}</td>
+      <td>{{ request[2] }}</td>
+      <td>{{ request[3]|safe }}</td>
+      <td>{{ request[4] }}</td>
+      <td>{{ request[5] }}</td>
+      <td>{{ request[6] }}</td>
+      <td>
+        <form
+          method="post"
+          action="{{ url_for('main.admin_delete_ad_request', ad_request_id=request[0]) }}"
+          style="display: inline"
+        >
+          <button type="submit" class="btn btn-outline-danger">Delete</button>
+        </form>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

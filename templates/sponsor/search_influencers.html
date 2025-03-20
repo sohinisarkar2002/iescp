@@ -1,0 +1,68 @@
+{% extends "sponsor/base.html" %} {% block content %}
+<h1>Search Influencers</h1>
+<form method="POST" action="{{ url_for('main.search_influencers') }}">
+  <div class="form-group">
+    <label for="category">Category</label>
+    <select class="form-control" id="category" name="category">
+      <option value="">Select Category</option>
+      {% for category in categories %}
+      <option value="{{ category }}">{{ category }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="form-group">
+    <label for="niche">Niche</label>
+    <select class="form-control" id="niche" name="niche">
+      <option value="">Select Niche</option>
+      {% for niche in niches %}
+      <option value="{{ niche }}">{{ niche }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="form-group">
+    <label for="reach">Minimum Reach</label>
+    <input
+      type="number"
+      class="form-control"
+      id="reach"
+      name="reach"
+      placeholder="Minimum number of followers"
+    />
+  </div>
+  <button type="submit" class="btn btn-primary">Search</button>
+</form>
+
+{% if request.method == 'POST' %} {% if influencers %}
+<h2 class="mt-3">Influencers</h2>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Username</th>
+      <th>Email</th>
+      <th>Category</th>
+      <th>Niche</th>
+      <th>Reach</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for influencer in influencers %}
+    <tr>
+      <td>{{ influencer[0] }}</td>
+      <td>{{ influencer[1] }}</td>
+      <td>{{ influencer[2] }}</td>
+      <td>{{ influencer[3] }}</td>
+      <td>{{ influencer[4] }}</td>
+      <td>{{ influencer[5] }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<h3 class="mt-3">No results found!</h3>
+{% endif %} {% endif %}
+
+<a href="{{ url_for('main.sponsor_dashboard') }}" class="btn btn-secondary mt-3"
+  >Back to Dashboard</a
+>
+{% endblock %}

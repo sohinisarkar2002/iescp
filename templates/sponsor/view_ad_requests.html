@@ -1,0 +1,43 @@
+{% extends 'sponsor/base.html' %} {% block content %}
+<h2 class="mt-3">Ad Requests</h2>
+<table class="table">
+  <thead>
+    <tr>
+      <th>Campaign</th>
+      <th>Influencer</th>
+      <th>Message</th>
+      <th>Requirements</th>
+      <th>Payment Amount</th>
+      <th>Status</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for ad_request in ad_requests %}
+    <tr>
+      <td>{{ ad_request[7] }}</td>
+      <td>{{ ad_request[8] }}</td>
+      <td>{{ ad_request[3]|safe }}</td>
+      <td>{{ ad_request[4] }}</td>
+      <td>$ {{ ad_request[5] }}</td>
+      <td>{{ ad_request[6] }}</td>
+      <td>
+        {% if ad_request[6] == 'Pending' %}
+        <a
+          href="{{ url_for('main.edit_ad_request', ad_request_id=ad_request[0]) }}"
+          class="btn btn-warning btn-sm"
+          >Edit</a
+        >
+        <a
+          href="{{ url_for('main.delete_ad_request', ad_request_id=ad_request[0]) }}"
+          class="btn btn-danger btn-sm"
+          >Delete</a
+        >
+        {% endif %}
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+<a href="{{ url_for('main.sponsor_dashboard') }}" class="btn btn-secondary mt-4">Back to Dashboard</a>
+{% endblock %}

@@ -1,0 +1,52 @@
+{% extends 'sponsor/base.html' %} {% block content %}
+<h1>Negotiate Ad Request</h1>
+<form method="POST">
+  <div class="form-group">
+    <label for="message">Message to Sponsor</label>
+    <textarea
+      id="message"
+      name="message"
+      class="form-control"
+      rows="4"
+      placeholder="Write your message here..."
+      required
+    ></textarea>
+  </div>
+  <div class="form-group">
+    <label for="payment_amount">New Payment Amount</label>
+    <input
+      type="number"
+      id="payment_amount"
+      name="payment_amount"
+      class="form-control"
+      placeholder="Enter new payment amount"
+    />
+  </div>
+  <div class="form-group">
+    <button
+      type="submit"
+      name="action"
+      value="negotiate"
+      class="btn btn-warning"
+    >
+      Send Changes
+    </button>
+    <button
+      type="submit"
+      name="action"
+      value="accept"
+      class="btn btn-success"
+    >
+      Accept
+    </button>
+    <button
+      type="submit"
+      name="action"
+      value="reject"
+      class="btn btn-danger"
+    >
+      Reject
+    </button>
+  </div>
+</form>
+{% endblock %}

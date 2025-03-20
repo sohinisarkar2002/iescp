@@ -1,0 +1,57 @@
+{% extends 'admin/base.html' %} {% block title %} Admin Dashboard {% endblock %}
+{% block content %}
+<h1>Admin Dashboard</h1>
+<p>Welcome, {{ username }}! Here are some statistics:</p>
+<ul>
+  <li>Active Users: {{ active_users }}</li>
+  <li>Active Campaigns: {{ active_campaigns }}</li>
+  <li>Total Ad Requests: {{ total_ad_requests }}</li>
+  <li>Flagged Users: {{ flagged_users }}</li>
+  <li>Flagged Campaigns: {{ flagged_campaigns }}</li>
+</ul>
+
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-md-6">
+      <h3>Active Users</h3>
+      <canvas id="userChart"></canvas>
+    </div>
+    <div class="col-md-6">
+      <h3>Campaigns</h3>
+      <canvas id="campaignChart"></canvas>
+    </div>
+  </div>
+  <div class="row mt-5">
+    <div class="col-md-6">
+      <h3>Ad Requests</h3>
+      <canvas id="adRequestChart"></canvas>
+    </div>
+    <div class="col-md-6">
+      <h3>Flagged Entities</h3>
+      <canvas id="flaggedChart"></canvas>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{{ url_for('static', filename='dashboard_charts.js') }}"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const activeUsers = {{ active_users }};
+    const publicCampaigns = {{ active_campaigns }};
+    const privateCampaigns = {{ private_campaigns }};
+    const adRequestStatuses = {
+      labels: ['Pending', 'Accepted', 'Rejected'],
+      values: [
+        {{ ad_request_statuses.Pending }},
+        {{ ad_request_statuses.Accepted }},
+        {{ ad_request_statuses.Rejected }}
+      ]
+    };
+    const flaggedUsers = {{ flagged_users }};
+    const flaggedCampaigns = {{ flagged_campaigns }};
+
+    initCharts(activeUsers, publicCampaigns, privateCampaigns, adRequestStatuses, flaggedUsers, flaggedCampaigns);
+  });
+</script>
+{% endblock %}

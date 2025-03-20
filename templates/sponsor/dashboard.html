@@ -1,0 +1,226 @@
+{% extends 'sponsor/base.html' %} {% block title %} Sponsor Dashboard {%
+endblock %} {% block content %}
+<h1>Sponsor Dashboard</h1>
+<p>Welcome, {{ username }}! Here are some statistics:</p>
+
+<div class="container mt-4">
+  <div class="row">
+    <div class="col-md-4 mb-3">
+      <div class="card">
+        <div class="card-header">
+          <h5>Profile Details</h5>
+        </div>
+        <div class="card-body">
+          <p><strong>Sponsor Name:</strong> {{ username }}</p>
+          <p><strong>Total Campaigns created:</strong> {{ total_campaigns }}</p>
+          <p>
+            <strong>Total Ad Requests created:</strong> {{ total_ad_requests }}
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-8">
+      <div class="d-flex justify-content-between mb-4">
+        <a href="{{ url_for('main.create_campaign') }}" class="btn btn-primary"
+          >Create Campaign</a
+        >
+        <a
+          href="{{ url_for('main.create_ad_request') }}"
+          class="btn btn-primary"
+          >Create Ad Request</a
+        >
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <canvas id="campaignsChart" width="200" height="200"></canvas>
+        </div>
+        <div class="col-md-6">
+          <canvas id="adRequestsChart" width="200" height="200"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="mt-5" id="campaigns">My Campaigns</h2>
+  <table class="table table-striped mt-4">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Start Date</th>
+        <th>End Date</th>
+        <th>Status</th>
+        <th>Flagged</th>
+        <th>Category</th>
+        <th>Niche</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for campaign in campaigns %}
+      <tr>
+        <td>{{ campaign.name }}</td>
+        <td>{{ campaign.description }}</td>
+        <td>{{ campaign.start_date }}</td>
+        <td>{{ campaign.end_date }}</td>
+        <td>{{ campaign.status }}</td>
+        <td>
+          {% if campaign.flagged == 1 %}
+          <span class="text-danger">Flagged</span>
+          {% else %}
+          <span class="text-success">Not Flagged</span>
+          {% endif %}
+        </td>
+        <td>{{ campaign.category }}</td>
+        <td>{{ campaign.niche }}</td>
+        <td>
+          {% if campaign.flagged == 1 %}
+          <a
+            href="{{ url_for('main.delete_campaign', campaign_id=campaign[0]) }}"
+            class="btn btn-outline-danger"
+            >Delete</a
+          >
+          {% else %}
+          <a
+            href="{{ url_for('main.edit_campaign', campaign_id=campaign[0]) }}"
+            class="btn btn-outline-primary"
+            >Edit</a
+          >
+          <a
+            href="{{ url_for('main.delete_campaign', campaign_id=campaign[0]) }}"
+            class="btn btn-outline-danger mt-3"
+            >Delete</a
+          >
+          {% endif %}
+        </td>
+      </tr>
+      {% else %}
+      <tr>
+        <td colspan="8">No campaigns found!</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <h2 class="mt-5" id="ad_requests">Ad Requests</h2>
+  <table class="table table-striped mt-4">
+    <thead>
+      <tr>
+        <th>Campaign</th>
+        <th>Influencer</th>
+        <th>Message</th>
+        <th>Requirements</th>
+        <th>Payment Amount</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for ad_request in ad_requests %}
+      <tr>
+        <td>{{ ad_request[7] }}</td>
+        <td>{{ ad_request[8] }}</td>
+        <td>{{ ad_request[3]|safe }}</td>
+        <td>{{ ad_request[4] }}</td>
+        <td>$ {{ ad_request[5] }}</td>
+        <td>{{ ad_request[6] }}</td>
+        <td>
+          {% if ad_request[6] == 'Pending' %}
+          <a
+            href="{{ url_for('main.sponsor_negotiation', ad_request_id=ad_request[0]) }}"
+            class="btn btn-outline-primary mb-3"
+            >Negotiate</a
+          >
+          <a
+            href="{{ url_for('main.edit_ad_request', ad_request_id=ad_request[0]) }}"
+            class="btn btn-outline-primary mb-3"
+            >Edit</a
+          >
+          <a
+            href="{{ url_for('main.delete_ad_request', ad_request_id=ad_request[0]) }}"
+            class="btn btn-outline-danger"
+            >Delete</a
+          >
+          {% elif ad_request[6] == 'Accepted' %}
+          <a
+            href="{{ url_for('main.edit_ad_request', ad_request_id=ad_request[0]) }}"
+            class="btn btn-outline-primary mb-3"
+            >Edit</a
+          >
+          <a
+            href="{{ url_for('main.delete_ad_request', ad_request_id=ad_request[0]) }}"
+            class="btn btn-outline-danger"
+            >Delete</a
+          >
+          {% elif ad_request[6] == 'Rejected' %}
+          <a
+            href="{{ url_for('main.edit_ad_request', ad_request_id=ad_request[0]) }}"
+            class="btn btn-outline-primary"
+            >Edit</a
+          >
+          <a
+            href="{{ url_for('main.delete_ad_request', ad_request_id=ad_request[0]) }}"
+            class="btn btn-outline-danger mt-3"
+            >Delete</a
+          >
+          {% elif ad_request[6] == 'Negotiating' %}
+          <a
+            href="{{ url_for('main.sponsor_negotiation', ad_request_id=ad_request[0]) }}"
+            class="btn btn-primary"
+            >Negotiate</a
+          >
+          <a
+            href="{{ url_for('main.edit_ad_request', ad_request_id=ad_request[0]) }}"
+            class="btn btn-outline-primary mt-3"
+            >Edit</a
+          >
+          <a
+            href="{{ url_for('main.delete_ad_request', ad_request_id=ad_request[0]) }}"
+            class="btn btn-outline-danger mt-3"
+            >Delete</a
+          >
+          {% else %}
+          <a
+            href="{{ url_for('main.sponsor_view_ad_requests', ad_request_id=ad_request[0]) }}"
+            class="btn btn-outline-info btn-sm mb-2"
+            >View Details</a
+          >
+          <a
+            href="{{ url_for('main.edit_ad_request', ad_request_id=ad_request[0]) }}"
+            class="btn btn-outline-primary"
+            >Edit</a
+          >
+          <a
+            href="{{ url_for('main.delete_ad_request', ad_request_id=ad_request[0]) }}"
+            class="btn btn-outline-danger mt-3"
+            >Delete</a
+          >
+          {% endif %}
+        </td>
+      </tr>
+      {% else %}
+      <tr>
+        <td colspan="7">No ad requests found!</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{{ url_for('static', filename='sponsor_charts.js') }}"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const totalCampaigns = {{ total_campaigns | tojson }};
+    const activeCampaigns = {{ active_campaigns | tojson }};
+    const expiredCampaigns = {{ expired_campaigns | tojson }};
+    const upcomingCampaigns = {{ upcoming_campaigns | tojson }};
+    const adRequestLabels = {{ ad_request_labels | tojson }};
+    const adRequestValues = {{ ad_request_values | tojson }};
+
+    initSponsorCharts(totalCampaigns, activeCampaigns, expiredCampaigns, upcomingCampaigns, adRequestLabels, adRequestValues);
+  });
+</script>
+{% endblock %}
